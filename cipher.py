@@ -14,4 +14,3 @@ def decode(text: str, unshift: int):
     return encode(text, -unshift)
 
 
-print(decode('-.(bfqqfhj fqajx itx xfsytx).-', 5))
