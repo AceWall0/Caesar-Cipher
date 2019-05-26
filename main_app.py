@@ -1,5 +1,6 @@
 import requests
 import json
+import hashlib
 
 
 def main():
@@ -22,6 +23,10 @@ def decode(text: str, unshift: int):
     return encode(text, -unshift)
 
 
+def sha1(text: str):
+    return hashlib.sha1(text.encode('utf-8')).hexdigest()
+
+
 def requestFile(token):
     """Downloads the json file from the challange with given token and returns the file name."""
     r = requests.get(f'https://api.codenation.dev/v1/challenge/dev-ps/generate-data?token={token}')
@@ -38,6 +43,7 @@ def decodeFile(filename):
         f.seek(0)
         decoded = decode(data['cifrado'], data['numero_casas'])
         data['decifrado'] = decoded
+        data["resumo_criptografico"] = sha1(decoded)
         f.write(json.dumps(data, indent=4))
 
 
