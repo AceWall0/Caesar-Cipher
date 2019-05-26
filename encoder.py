@@ -12,5 +12,3 @@ def encode(text: str, shift: int):
 
 def decode(text: str, unshift: int):
     return encode(text, -unshift)
-
-
