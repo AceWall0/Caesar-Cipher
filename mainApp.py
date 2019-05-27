@@ -4,8 +4,10 @@ import hashlib
 
 
 def main():
-    fileName = requestFile('1abaff9bcb0a63706797ae23058898e3f6539f19')
+    TOKEN = '1abaff9bcb0a63706797ae23058898e3f6539f19'
+    fileName = requestFile(TOKEN)
     decodeFile(fileName)
+    postFile(TOKEN, fileName)
 
 
 def encode(text: str, shift: int):
@@ -29,6 +31,7 @@ def sha1(text: str):
 
 def requestFile(token):
     """Downloads the json file from the challange with given token and returns the file name."""
+
     r = requests.get(f'https://api.codenation.dev/v1/challenge/dev-ps/generate-data?token={token}')
     filename = 'answer.json'
     with open(filename, 'w') as f:
@@ -36,8 +39,19 @@ def requestFile(token):
     return filename
 
 
+def postFile(token, filename):
+    files = {'answer': open(filename, 'rb')}
+    url = f'https://api.codenation.dev/v1/challenge/dev-ps/submit-solution?token={token}'
+    r = requests.post(url, files=files)
+
+    print(r.headers)
+    print(r.text)
+    print(r.status_code)
+
+
 def decodeFile(filename):
     """Decodes the ciphered text in the json file from the challange"""
+
     with open(filename, 'r+') as f:
         data = json.loads(f.read())
         f.seek(0)
